@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Recipe Finder 🍳</title>
+    <link rel="stylesheet" href="style.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
+</head>
+
+<body>
+    <!-- HEADER -->
+    <header class="app-header">
+        <div class="logo">
+            <h1>🍳 Recipe Finder</h1>
+            <p>Discover, cook, and save your favorite meals</p>
+        </div>
+        <nav>
+            <button id="viewFavoritesBtn" class="nav-btn">❤️ View Favorites</button>
+        </nav>
+    </header>
+
+    <!-- SEARCH BAR -->
+    <section class="search-section">
+        <div class="search-box">
+            <input type="text" id="searchInput" placeholder="🔍 Search recipes by name or ingredient..." />
+            <button id="searchBtn" class="search-btn">Search</button>
+        </div>
+    </section>
+
+    <!-- MAIN CONTENT -->
+    <main>
+        <!-- Search Results -->
+        <section class="results-section">
+            <h2>🔍 Search Results</h2>
+            <div id="results" class="card-container">
+                <p class="placeholder-text">Type something above and hit search to see recipes...</p>
+            </div>
+        </section>
+
+        <!-- Favorites -->
+        <section class="favorites-section hidden">
+            <h2>❤️ Your Favorites</h2>
+            <div id="favorites" class="card-container">
+                <p class="placeholder-text">You haven’t added any recipes yet...</p>
+            </div>
+        </section>
+    </main>
+
+    <!-- RECIPE MODAL -->
+    <div id="recipeModal" class="modal hidden">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <div id="modalDetails"></div>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer>
+        <p>Made with ❤️ for food lovers | Powered by <a href="https://www.themealdb.com/" target="_blank">TheMealDB
+                API</a></p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
