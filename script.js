@@ -1,6 +1,7 @@
 const searchBtn = document.getElementById("searchBtn");
 const searchInput = document.getElementById("searchInput");
 const resultsContainer = document.getElementById("results");
+const favoritesContainer = document.getElementById("favorites");
 const viewFavoritesBtn = document.getElementById("viewFavoritesBtn");
 const favoritesSection = document.querySelector(".favorites-section");
 const resultsSection = document.querySelector(".results-section");
@@ -10,7 +11,6 @@ const closeModalBtn = document.querySelector(".close-btn");
 
 let favorites = JSON.parse(localStorage.getItem("favorites")) || [];
 
-// Fetch recipes
 async function fetchRecipes(query) {
     resultsContainer.innerHTML = `<p class="placeholder-text">⏳ Loading recipes...</p>`;
     try {
@@ -25,6 +25,8 @@ async function fetchRecipes(query) {
         resultsContainer.innerHTML = `<p class="placeholder-text">❌ Error fetching recipes.</p>`;
     }
 }
+
+
 function displayRecipes(meals, container) {
     container.innerHTML = meals.map(meal => `
         <div class="recipe-card">
@@ -36,7 +38,7 @@ function displayRecipes(meals, container) {
     `).join("");
 }
 
-// View details
+
 async function viewDetails(id) {
     try {
         const res = await fetch(`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${id}`);
@@ -67,6 +69,7 @@ function addFavorite(id) {
     if (!favorites.includes(id)) {
         favorites.push(id);
         localStorage.setItem("favorites", JSON.stringify(favorites));
+        loadFavorites();
     }
 }
 
@@ -74,6 +77,7 @@ function addFavorite(id) {
 function removeFavorite(id) {
     favorites = favorites.filter(favId => favId !== id);
     localStorage.setItem("favorites", JSON.stringify(favorites));
+    loadFavorites();
 }
 
 async function loadFavorites() {
@@ -91,7 +95,15 @@ window.addEventListener("click", e => {
     if (e.target === modal) modal.classList.add("hidden");
 });
 
+loadFavorites();
 
+function getFavorites() {
+    return JSON.parse(localStorage.getItem("favorites")) || [];
+}
+
+function saveFavorites(favs) {
+    localStorage.setItem("favorites", JSON.stringify(favs));
+}
 
 function toggleFavorite(id, name, thumb) {
     let favs = getFavorites();
@@ -122,6 +134,16 @@ function displayFavorites() {
         </div>
     `).join("");
 }
+
+
+viewFavoritesBtn.addEventListener("click", () => {
+    resultsSection.classList.toggle("hidden");
+    favoritesSection.classList.toggle("hidden");
+    if (!favoritesSection.classList.contains("hidden")) {
+        displayFavorites();
+    }
+});
+
 
 searchBtn.addEventListener("click", () => {
     const query = searchInput.value.trim();
