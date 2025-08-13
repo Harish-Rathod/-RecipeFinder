@@ -1,6 +1,7 @@
 const searchBtn = document.getElementById("searchBtn");
 const searchInput = document.getElementById("searchInput");
 const resultsContainer = document.getElementById("results");
+const favoritesContainer = document.getElementById("favorites");
 const viewFavoritesBtn = document.getElementById("viewFavoritesBtn");
 const favoritesSection = document.querySelector(".favorites-section");
 const resultsSection = document.querySelector(".results-section");
@@ -25,6 +26,8 @@ async function fetchRecipes(query) {
         resultsContainer.innerHTML = `<p class="placeholder-text">❌ Error fetching recipes.</p>`;
     }
 }
+
+// Display recipes
 function displayRecipes(meals, container) {
     container.innerHTML = meals.map(meal => `
         <div class="recipe-card">
@@ -67,13 +70,15 @@ function addFavorite(id) {
     if (!favorites.includes(id)) {
         favorites.push(id);
         localStorage.setItem("favorites", JSON.stringify(favorites));
+        loadFavorites();
     }
 }
 
-
+// Remove from favorites
 function removeFavorite(id) {
     favorites = favorites.filter(favId => favId !== id);
     localStorage.setItem("favorites", JSON.stringify(favorites));
+    loadFavorites();
 }
 
 async function loadFavorites() {
@@ -86,12 +91,22 @@ async function loadFavorites() {
     }
 }
 
+// Close modal
 closeModalBtn.addEventListener("click", () => modal.classList.add("hidden"));
 window.addEventListener("click", e => {
     if (e.target === modal) modal.classList.add("hidden");
 });
 
+loadFavorites();
 
+// Favorites
+function getFavorites() {
+    return JSON.parse(localStorage.getItem("favorites")) || [];
+}
+
+function saveFavorites(favs) {
+    localStorage.setItem("favorites", JSON.stringify(favs));
+}
 
 function toggleFavorite(id, name, thumb) {
     let favs = getFavorites();
@@ -123,6 +138,16 @@ function displayFavorites() {
     `).join("");
 }
 
+// Switch between results and favorites
+viewFavoritesBtn.addEventListener("click", () => {
+    resultsSection.classList.toggle("hidden");
+    favoritesSection.classList.toggle("hidden");
+    if (!favoritesSection.classList.contains("hidden")) {
+        displayFavorites();
+    }
+});
+
+// Search handlers
 searchBtn.addEventListener("click", () => {
     const query = searchInput.value.trim();
     if (query) {
